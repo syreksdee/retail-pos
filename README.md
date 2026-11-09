@@ -56,3 +56,17 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Deploying to Vercel
+
+This application uses Laravel and PHP, so deploy it as a container rather than as a static Vite site. Keep `Dockerfile`, `Caddyfile`, and `vercel.json` at the project root. In Vercel, allow the Container preset to detect the Dockerfile and remove the custom Build Command and Output Directory overrides (such as `npm run build` and `dist`).
+
+Configure these environment variables in the Vercel project:
+
+- `APP_KEY`: generate with `php artisan key:generate --show`.
+- `APP_ENV=production` and `APP_DEBUG=false`.
+- `APP_URL`: the public HTTPS URL for the deployment.
+- `DB_CONNECTION=mysql`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, and `DB_PASSWORD` for a persistent external MySQL or MariaDB database.
+- `CACHE_STORE=database` and `SESSION_DRIVER=database` so cache and sessions are shared across container instances.
+
+Run `php artisan migrate --force` against the production database as a release step before serving traffic. Do not rely on the container filesystem for persistent uploads; use external object storage for uploaded files.
